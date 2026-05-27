@@ -1,68 +1,56 @@
 ﻿using System;
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace DiscordRPC.Helper
 {
+    internal class BackoffDelay(int min, int max, Random random)
+    {
+        /// <summary>
+        /// The maximum time the backoff can reach
+        /// </summary>
+        public int Maximum { get; } = max;
 
-	internal class BackoffDelay
-	{
-		/// <summary>
-		/// The maximum time the backoff can reach
-		/// </summary>
-		public int Maximum { get; private set; }
+        /// <summary>
+        /// The minimum time the backoff can start at
+        /// </summary>
+        public int Minimum { get; } = min;
 
-		/// <summary>
-		/// The minimum time the backoff can start at
-		/// </summary>
-		public int Minimum { get; private set; }
+        /// <summary>
+        /// The current time of the backoff
+        /// </summary>
+        public int Current { get; private set; } = min;
 
-		/// <summary>
-		/// The current time of the backoff
-		/// </summary>
-		public int Current { get { return _current; } }
-		private int _current;
+        /// <summary>
+        /// The current number of failures
+        /// </summary>
+        public int Fails { get; private set; }
 
-		/// <summary>
-		/// The current number of failures
-		/// </summary>
-		public int Fails { get { return _fails; } }
-		private int _fails;
+        /// <summary>
+        /// The random generator
+        /// </summary>
+        public Random Random { get; set; } = random;
 
-		/// <summary>
-		/// The random generator
-		/// </summary>
-		public Random Random { get; set; }
+        public BackoffDelay(int min, int max) : this(min, max, new Random()) { }
 
-		private BackoffDelay() { }
-		public BackoffDelay(int min, int max) : this(min, max, new Random()) { }
-		public BackoffDelay(int min, int max, Random random)
-		{
-			Minimum = min;
-			Maximum = max;
+        /// <summary>
+        /// Resets the backoff
+        /// </summary>
+        public void Reset()
+        {
+            Fails = 0;
+            Current = Minimum;
+        }
 
-			_current = min;
-			_fails = 0;
-			Random = random;
-		}
+        public int NextDelay()
+        {
+            // Increment the failures
+            Fails++;
 
-		/// <summary>
-		/// Resets the backoff
-		/// </summary>
-		public void Reset()
-		{
-			_fails = 0;
-			_current = Minimum;
-		}
+            double diff = (Maximum - Minimum) / 100f;
+            Current = (int)Math.Floor(diff * Fails) + Minimum;
 
-		public int NextDelay()
-		{
-			//Increment the failures
-			_fails++;
-
-			double diff = (Maximum - Minimum) / 100f;
-			_current = (int)Math.Floor(diff * _fails) + Minimum;
-
-
-			return Math.Min(Math.Max(_current, Minimum), Maximum);
-		}
-	}
+            return Math.Min(Math.Max(Current, Minimum), Maximum);
+        }
+    }
 }

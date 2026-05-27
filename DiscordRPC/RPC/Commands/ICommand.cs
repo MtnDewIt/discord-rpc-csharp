@@ -3,7 +3,7 @@
 namespace DiscordRPC.RPC.Commands
 {
     internal interface ICommand
-	{
-		IPayload PreparePayload(long nonce);
-	}
+    {
+        IPayload PreparePayload(long nonce);
+    }
 }

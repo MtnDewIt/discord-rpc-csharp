@@ -5,8 +5,4 @@
     <Deterministic>true</Deterministic>
     <Platforms>x64</Platforms>
   </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0.0" PrivateAssets="All" />
-  </ItemGroup>
 </Project>

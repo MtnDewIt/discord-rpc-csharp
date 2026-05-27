@@ -1,6 +1,8 @@
-﻿using DiscordRPC.Helper;
-using Newtonsoft.Json;
+﻿using DiscordRPC.Exceptions;
+using DiscordRPC.Helper;
 using System;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace DiscordRPC
 {
@@ -30,7 +32,8 @@ namespace DiscordRPC
 		/// A unique ID for the player's current party / lobby / group. If this is not supplied, they player will not be in a party and the rest of the information will not be sent. 
 		/// <para>Max 128 Bytes</para>
 		/// </summary>
-		[JsonProperty("id", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("id")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string ID { get { return _partyid; } set { _partyid = value.GetNullOrString(); } }
 		private string _partyid;
 
@@ -49,17 +52,20 @@ namespace DiscordRPC
 		/// <summary>
 		/// The privacy of the party
 		/// </summary>
-		[JsonProperty("privacy", NullValueHandling = NullValueHandling.Include, DefaultValueHandling = DefaultValueHandling.Include)]
+		[JsonPropertyName("privacy")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        
 		public PrivacySetting Privacy { get; set; }
 
-		[JsonProperty("size", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("size")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		private int[] _size
 		{
 			get
 			{
 				//see issue https://github.com/discordapp/discord-rpc/issues/111
 				int size = Math.Max(1, Size);
-				return [size, Math.Max(size, Max)];
+				return new int[] { size, Math.Max(size, Max) };
 			}
 
 			set

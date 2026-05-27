@@ -1,4 +1,9 @@
-﻿namespace DiscordRPC.Logging
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace DiscordRPC.Logging
 {
 	/// <summary>
 	/// Logs the outputs to a file

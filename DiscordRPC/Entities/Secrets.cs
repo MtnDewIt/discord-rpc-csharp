@@ -1,7 +1,8 @@
 ﻿using DiscordRPC.Exceptions;
-using Newtonsoft.Json;
 using System;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace DiscordRPC
 {
@@ -15,7 +16,7 @@ namespace DiscordRPC
 	public class Secrets
 	{
 		/// <summary>
-		/// The unique match code to distinguish different games/lobbies. Use <see cref="Secrets.CreateSecret(Random)"/> to get an appropriately sized secret. 
+		/// The unique match code to distinguish different games/lobbies. Use <see cref="Secrets"/> to get an appropriately sized secret. 
 		/// <para>This cannot be null and must be supplied for the  Join / Spectate feature to work.</para>
 		/// <para>Max Length of 128 characters</para>
 		/// </summary>
@@ -30,7 +31,8 @@ namespace DiscordRPC
 		/// </para>
 		/// <para>Max Length of 128 characters</para>
 		/// </summary>
-		[JsonProperty("join", NullValueHandling = NullValueHandling.Ignore)]
+		[JsonPropertyName("join")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string Join
 		{
 			get => _joinSecret;
@@ -44,7 +46,7 @@ namespace DiscordRPC
 
 		/// <summary>Alias of Join</summary>
 		/// <remarks>This was made obsolete as the property name contains redundant information.</remarks>
-		[Obsolete("Property name is redundant and replaced with Join.")]
+		[System.Obsolete("Property name is redundant and replaced with Join.")]
 		[JsonIgnore]
 		public string JoinSecret
 		{
@@ -59,7 +61,7 @@ namespace DiscordRPC
 		/// </para>
 		/// <para>Max Length of 128 characters</para>
 		/// </summary>
-		[Obsolete("Spectating is no longer supported by Discord.")]
+		[System.Obsolete("Spectating is no longer supported by Discord.")]
 		[JsonIgnore]
 		public string SpectateSecret { get; set; }
 		#region Statics

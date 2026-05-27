@@ -17,7 +17,7 @@ namespace DiscordRPC.IO
 		{
 			"app/com.discordapp.Discord/",	// Flatpak
 			"snap.discord/",				// Snap
-            ".flatpak/dev.vencord.Vesktop/xdg-run" // Vesktop (Flatpak)
+			".flatpak/dev.vencord.Vesktop/xdg-run" // Vesktop (Flatpak)
 			// TODO: Add more package managers as needed such as AppImage
 		};
 
@@ -88,6 +88,11 @@ namespace DiscordRPC.IO
 		{
 			if (Environment.OSVersion.Platform == PlatformID.Unix)
 				return true;
+
+#if NETFRAMEWORK // MacOS was replaced with Unix in .NET Core
+			if (Environment.OSVersion.Platform == PlatformID.MacOSX)
+				return true;
+#endif
 
 			return false;
 		}

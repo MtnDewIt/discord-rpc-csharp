@@ -1,15 +1,15 @@
 using DiscordRPC.Exceptions;
 using DiscordRPC.Helper;
-using Newtonsoft.Json;
 using System;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace DiscordRPC
 {
     /// <summary>
     /// The base rich presence structure
     /// </summary>
-    [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
     [Serializable]
     public class BaseRichPresence
     {
@@ -17,7 +17,8 @@ namespace DiscordRPC
         /// The user's current <see cref="Party"/> status. For example, "Playing Solo" or "With Friends".
         /// <para>Max 128 characters</para>
         /// </summary>
-        [JsonProperty("state", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("state")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string State
         {
             get { return _state; }
@@ -35,7 +36,8 @@ namespace DiscordRPC
         /// URL that is linked to when clicking on the details text in the activity card.
         /// <para>Max 256 characters</para>
         /// </summary>
-        [JsonProperty("state_url", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("state_url")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string StateUrl
         {
             get { return _stateUrl; }
@@ -50,29 +52,13 @@ namespace DiscordRPC
         }
         /// <summary>Inernal inner state URL string</summary>
         protected internal string _stateUrl;
-        
-        /// <summary>
-        /// Name that is displayed for the activity, replacing base application name
-        /// <para>Max 256 characters</para>
-        /// </summary>
-        [JsonProperty("name", NullValueHandling = NullValueHandling.Ignore)]
-        public string Name
-        {
-            get { return _name; }
-            set
-            {
-                if (!ValidateString(value, out _name, false, 256))
-                    throw new StringOutOfRangeException(256);
-            }
-        }
-        /// <summary>Name string</summary>
-        protected internal string _name;
 
         /// <summary>
         /// What the user is currently doing. For example, "Competitive - Total Mayhem".
         /// <para>Max 128 characters</para>
         /// </summary>
-        [JsonProperty("details", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("details")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Details
         {
             get { return _details; }
@@ -89,7 +75,8 @@ namespace DiscordRPC
         /// URL that is linked to when clicking on the details text in the activity card.
         /// <para>Max 256 characters</para>
         /// </summary>
-        [JsonProperty("details_url", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("details_url")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string DetailsUrl
         {
             get { return _detailsUrl; }
@@ -106,21 +93,42 @@ namespace DiscordRPC
         protected internal string _detailsUrl;
 
         /// <summary>
+        /// Name that is displayed for the activity, replacing base application name
+        /// <para>Max 256 characters</para>
+        /// </summary>
+        [JsonPropertyName("name")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Name
+        {
+            get { return _name; }
+            set
+            {
+                if (!ValidateString(value, out _name, false, 256))
+                    throw new StringOutOfRangeException(256);
+            }
+        }
+        /// <summary>Name string</summary>
+        protected internal string _name;
+
+        /// <summary>
         /// The time elapsed / remaining time data.
         /// </summary>
-        [JsonProperty("timestamps", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("timestamps")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public Timestamps Timestamps { get; set; }
 
         /// <summary>
         /// The names of the images to use and the tooltips to give those images.
         /// </summary>
-        [JsonProperty("assets", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("assets")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public Assets Assets { get; set; }
 
         /// <summary>
         /// The party the player is currently in. The <see cref="Party.ID"/> must be set for this to be included in the RichPresence update.
         /// </summary>
-        [JsonProperty("party", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("party")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public Party Party { get; set; }
 
         /// <summary>
@@ -128,19 +136,22 @@ namespace DiscordRPC
         /// <para>To keep security on the up and up, Discord requires that you properly hash/encode/encrypt/put-a-padlock-on-and-swallow-the-key-but-wait-then-how-would-you-open-it your secrets.</para>
         /// <para>Visit the <see href="https://discordapp.com/developers/docs/rich-presence/how-to#secrets">Rich Presence How-To</see> for more information.</para>
         /// </summary>
-        [JsonProperty("secrets", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("secrets")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public Secrets Secrets { get; set; }
 
         /// <summary>
         /// The activity type
         /// </summary>
-        [JsonProperty("type", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("type")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public ActivityType Type { get; set; }
 
         /// <summary>
         /// The display type for the status
         /// </summary>
-        [JsonProperty("status_display_type", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("status_display_type")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public StatusDisplayType StatusDisplay { get; set; }
 
         #region Has Checks
@@ -249,8 +260,8 @@ namespace DiscordRPC
 
             if (State != other.State ||
                 StateUrl != other.StateUrl ||
-                Details != other.Details ||
                 Name != other.Name ||
+                Details != other.Details ||
                 DetailsUrl != other.DetailsUrl ||
                 Type != other.Type)
                 return false;
@@ -371,7 +382,8 @@ namespace DiscordRPC
         /// The buttons to display in the presence. 
         /// <para>Max of 2</para>
         /// </summary>
-        [JsonProperty("buttons", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("buttons")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public Button[] Buttons { get; set; }
 
         /// <summary>
@@ -406,7 +418,7 @@ namespace DiscordRPC
             StateUrl = stateUrl;
             return this;
         }
-        
+
         /// <summary>
         /// Sets the name of the Rich Presence. See also <seealso cref="BaseRichPresence.Name"/>.
         /// </summary>
@@ -515,7 +527,7 @@ namespace DiscordRPC
         {
             if (topButton != null && bottomButton != null)
             {
-                Buttons = [topButton, bottomButton];
+                Buttons = new Button[] { topButton, bottomButton };
             }
             else if (topButton == null && bottomButton == null)
             {
@@ -523,7 +535,7 @@ namespace DiscordRPC
             }
             else
             {
-                Buttons = [topButton ?? bottomButton];
+                Buttons = new Button[] { topButton ?? bottomButton };
             }
 
             return this;
@@ -668,14 +680,14 @@ namespace DiscordRPC
         /// <summary>
         /// ID of the client
         /// </summary>
-        [JsonProperty("application_id")]
+        [JsonPropertyName("application_id")]
         public string ClientID { get; private set; }
 
         /// <summary>
         /// Name of the bot
         /// </summary>
-        [JsonProperty("name")]
-        new public string Name { get; private set; }
+        [JsonPropertyName("name")]
+        public string Name { get; private set; }
 
     }
 }

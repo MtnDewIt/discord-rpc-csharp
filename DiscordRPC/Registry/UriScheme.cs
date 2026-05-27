@@ -1,6 +1,5 @@
-﻿using DiscordRPC.Logging;
+using DiscordRPC.Logging;
 using System;
-using System.Runtime.InteropServices;
 
 namespace DiscordRPC.Registry
 {
@@ -41,23 +40,45 @@ namespace DiscordRPC.Registry
         /// </summary>
         public static bool Register(SchemeInfo info, ILogger logger = null)
         {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+#if NET471_OR_GREATER || NETSTANDARD2_0_OR_GREATER || NET5_0_OR_GREATER
+            // .NET >4.7.1 adds support for RuntimeInformation
+            if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))
             {
                 return new WindowsUriScheme(logger).Register(info);
             }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            else if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Linux))
             {
                 return new UnixUriScheme(logger).Register(info);
             }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            else if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.OSX))
             {
                 return new MacUriScheme(logger).Register(info);
             }
             else
             {
-                logger?.Error("Unknown Platform: {0}", RuntimeInformation.OSDescription);
+                logger?.Error("Unknown Platform: {0}", System.Runtime.InteropServices.RuntimeInformation.OSDescription);
                 throw new PlatformNotSupportedException("Platform does not support registration.");
             }
+#else
+            switch (Environment.OSVersion.Platform)
+            {
+                case PlatformID.Win32Windows:
+                case PlatformID.Win32S:
+                case PlatformID.Win32NT:
+                case PlatformID.WinCE:
+                    return new WindowsUriScheme(logger).Register(info);
+
+                case PlatformID.Unix:
+                    return new UnixUriScheme(logger).Register(info);
+
+                case PlatformID.MacOSX:
+                    return new MacUriScheme(logger).Register(info);
+
+                default:
+                    logger?.Error("Unknown Platform: {0}", Environment.OSVersion.Platform);
+                    throw new PlatformNotSupportedException("Platform does not support registration.");
+            }
+#endif
         }
     }
 }

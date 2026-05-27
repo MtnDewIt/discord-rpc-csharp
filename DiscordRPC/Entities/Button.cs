@@ -1,7 +1,9 @@
 ﻿using DiscordRPC.Exceptions;
-using Newtonsoft.Json;
+using DiscordRPC.Helper;
 using System;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace DiscordRPC
 {
@@ -14,7 +16,7 @@ namespace DiscordRPC
 		/// Text shown on the button
 		/// <para>Max 31 bytes.</para>
 		/// </summary>
-		[JsonProperty("label")]
+		[JsonPropertyName("label")]
 		public string Label
 		{
 			get { return _label; }
@@ -30,7 +32,7 @@ namespace DiscordRPC
 		/// The URL opened when clicking the button.
 		/// <para>Max 512 characters.</para>
 		/// </summary>
-		[JsonProperty("url")]
+		[JsonPropertyName("url")]
 		public string Url
 		{
 			get { return _url; }
