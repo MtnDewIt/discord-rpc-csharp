@@ -31,4 +31,3 @@ namespace DiscordRPC.RPC.Payload
         }
     }
 }
-

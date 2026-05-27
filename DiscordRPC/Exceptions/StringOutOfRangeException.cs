@@ -1,6 +1,4 @@
 ﻿using System;
-// ReSharper disable CommentTypo
-// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace DiscordRPC.Exceptions
 {

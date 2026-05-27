@@ -2,7 +2,6 @@ using DiscordRPC.Exceptions;
 using DiscordRPC.Helper;
 using System;
 using System.Text;
-using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace DiscordRPC
@@ -687,7 +686,7 @@ namespace DiscordRPC
         /// Name of the bot
         /// </summary>
         [JsonPropertyName("name")]
-        public string Name { get; private set; }
+        new public string Name { get; private set; }
 
     }
 }

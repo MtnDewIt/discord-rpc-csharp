@@ -19,17 +19,11 @@ namespace DiscordRPC.Message
 
         internal UnsubscribeMessage(ServerEvent evt)
         {
-            switch (evt)
+            Event = evt switch
             {
-                default:
-                case ServerEvent.ActivityJoin:
-                    Event = EventType.Join;
-                    break;
-
-                case ServerEvent.ActivityJoinRequest:
-                    Event = EventType.JoinRequest;
-                    break;
-            }
+                ServerEvent.ActivityJoinRequest => EventType.JoinRequest,
+                _ => EventType.Join,
+            };
         }
     }
 }

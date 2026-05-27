@@ -89,11 +89,6 @@ namespace DiscordRPC.IO
 			if (Environment.OSVersion.Platform == PlatformID.Unix)
 				return true;
 
-#if NETFRAMEWORK // MacOS was replaced with Unix in .NET Core
-			if (Environment.OSVersion.Platform == PlatformID.MacOSX)
-				return true;
-#endif
-
 			return false;
 		}
 	}

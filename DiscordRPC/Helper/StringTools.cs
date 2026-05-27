@@ -53,7 +53,7 @@ namespace DiscordRPC.Helper
 
             return str.ToLowerInvariant()
                 .Split(new[] { "_", " " }, StringSplitOptions.RemoveEmptyEntries)
-                .Select(s => char.ToUpper(s[0]) + s.Substring(1, s.Length - 1))
+                .Select(s => char.ToUpper(s[0]) + s[1..])
                 .Aggregate(string.Empty, (s1, s2) => s1 + s2);
         }
 

@@ -1,6 +1,4 @@
 ﻿using System;
-// ReSharper disable UnusedMember.Global
-// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace DiscordRPC.Helper
 {

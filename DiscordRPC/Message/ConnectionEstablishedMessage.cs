@@ -1,3 +1,5 @@
+using System;
+
 namespace DiscordRPC.Message
 {
     /// <summary>
@@ -13,7 +15,7 @@ namespace DiscordRPC.Message
 		/// <summary>
 		/// The pipe we ended up connecting too
 		/// </summary>
-		[System.Obsolete("The connected pipe is not neccessary information.")]
+		[Obsolete("The connected pipe is not neccessary information.")]
 		public int ConnectedPipe { get; internal set; }
 	}
 }

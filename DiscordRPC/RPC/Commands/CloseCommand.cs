@@ -1,8 +1,5 @@
-﻿using System;
+﻿using DiscordRPC.RPC.Payload;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DiscordRPC.RPC.Payload;
 using System.Text.Json.Serialization;
 
 namespace DiscordRPC.RPC.Commands

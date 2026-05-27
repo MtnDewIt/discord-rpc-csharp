@@ -1,6 +1,3 @@
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-// ReSharper disable UnusedMember.Global
-
 using System.Text.Json.Serialization;
 
 namespace DiscordRPC.Message

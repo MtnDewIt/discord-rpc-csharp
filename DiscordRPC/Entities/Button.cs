@@ -1,8 +1,6 @@
 ﻿using DiscordRPC.Exceptions;
-using DiscordRPC.Helper;
 using System;
 using System.Text;
-using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace DiscordRPC
@@ -47,5 +45,4 @@ namespace DiscordRPC
 		}
 		private string _url;
 	}
-
 }

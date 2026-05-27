@@ -7,24 +7,17 @@ using System.Text.Json.Serialization;
 namespace DiscordRPC.Helper
 {
     [
-    /* Commands Context */
         JsonSerializable(typeof(CloseCommand)),
         JsonSerializable(typeof(PresenceCommand)),
         JsonSerializable(typeof(RespondCommand)),
         JsonSerializable(typeof(SubscribeCommand)),
-
-    /* Payload Context */
         JsonSerializable(typeof(EventPayload)),
         JsonSerializable(typeof(ClosePayload)),
         JsonSerializable(typeof(IPayload)),
         JsonSerializable(typeof(ArgumentPayload<RespondCommand>)),
         JsonSerializable(typeof(ArgumentPayload<PresenceCommand>)),
         JsonSerializable(typeof(ArgumentPayload<CloseCommand>)),
-
-    /* IO Context */
         JsonSerializable(typeof(Handshake)),
-
-    /* Message Context */
         JsonSerializable(typeof(CloseMessage)),
         JsonSerializable(typeof(ConnectionEstablishedMessage)),
         JsonSerializable(typeof(ConnectionFailedMessage)),
@@ -37,9 +30,8 @@ namespace DiscordRPC.Helper
         JsonSerializable(typeof(SpectateMessage)),
         JsonSerializable(typeof(SubscribeMessage)),
         JsonSerializable(typeof(UnsubscribeMessage)),
-
-    /* Rich Presence Context */
         JsonSerializable(typeof(RichPresenceResponse)),
     ]
+
     internal partial class JsonSerializationContext : JsonSerializerContext;
 }
