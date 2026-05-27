@@ -1,0 +1,78 @@
+name: Create Release
+
+on:
+  pull_request:
+    types: [ opened, synchronize, reopened ]
+
+  push:
+    branches: [ "master" ]
+
+jobs:
+  build-release:
+
+    runs-on: windows-2025-vs2026
+
+    strategy:
+      matrix:
+        include:
+          - platform: x64
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Determine Version
+        id: determine_version
+        run: |
+          $version = (git rev-parse --short=7 HEAD).Trim()
+          Write-Output "Version determined: $version"
+          echo "version=$version" >> $env:GITHUB_OUTPUT
+
+      - name: Add MSBuild to PATH
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Setup NuGet
+        uses: NuGet/setup-nuget@v1.0.5
+
+      - name: Restore and Build solution
+        run: msbuild DiscordRPC.slnx -t:restore -t:rebuild -property:Platform=${{ matrix.platform }} -property:Configuration=Release
+
+      - name: Cleanse Build
+        if: github.event_name != 'pull_request'
+        run: |
+          Get-ChildItem -Path ./DiscordRPC/bin/${{ matrix.platform }}/Release/ -Recurse -Include *.pdb,*.lib | Remove-Item -Force
+
+      - name: Zip Launcher
+        if: github.event_name != 'pull_request'
+        run: |
+          7z a net10.0_${{ matrix.platform_name }}_dll.7z ./DiscordRPC/bin/${{ matrix.platform }}/Release/*
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        if: github.event_name != 'pull_request'
+        with:
+          name: net10.0-payload-${{ matrix.platform }}
+          path: net10.0_${{ matrix.platform_name }}_dll.7z
+          retention-days: 1
+
+  release: 
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request'
+
+    steps:
+    - name: Download Artifacts
+      uses: actions/download-artifact@v4
+      with:
+        pattern: net10.0-payload-*
+        path: release-artifacts
+        merge-multiple: true
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v2
+      with:
+        files: release-artifacts/*.7z
+        tag_name: ${{ steps.determine_version.outputs.version }}
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
