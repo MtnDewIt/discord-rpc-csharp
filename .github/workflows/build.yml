@@ -40,17 +40,17 @@ jobs:
         uses: NuGet/setup-nuget@v1.0.5
 
       - name: Restore and Build solution
-        run: msbuild DiscordRPC.slnx -t:restore -t:rebuild -property:Platform=${{ matrix.platform }} -property:Configuration=Release
+        run: msbuild HaloMods.DiscordRPC.slnx -t:restore -t:rebuild -property:Platform=${{ matrix.platform }} -property:Configuration=Release
 
       - name: Cleanse Build
         if: github.event_name != 'pull_request'
         run: |
-          Get-ChildItem -Path ./DiscordRPC/bin/${{ matrix.platform }}/Release/ -Recurse -Include *.pdb,*.lib | Remove-Item -Force
+          Get-ChildItem -Path ./HaloMods.DiscordRPC/bin/${{ matrix.platform }}/Release/ -Recurse -Include *.pdb,*.lib | Remove-Item -Force
 
       - name: Zip Launcher
         if: github.event_name != 'pull_request'
         run: |
-          7z a net10.0_${{ matrix.platform }}_dll.7z ./DiscordRPC/bin/${{ matrix.platform }}/Release/*
+          7z a net10.0_${{ matrix.platform }}_dll.7z ./HaloMods.DiscordRPC/bin/${{ matrix.platform }}/Release/*
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4

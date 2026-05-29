@@ -1,0 +1,11 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+  </Configurations>
+  <Project Path="HaloMods.DiscordRPC.Example/HaloMods.DiscordRPC.Example.csproj">
+    <Platform Project="x64" />
+  </Project>
+  <Project Path="HaloMods.DiscordRPC/HaloMods.DiscordRPC.csproj">
+    <Platform Project="x64" />
+  </Project>
+</Solution>
